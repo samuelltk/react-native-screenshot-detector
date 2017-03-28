@@ -14,7 +14,7 @@ export function unsubscribe(eventEmitter) {
   eventEmitter.removeAllListeners(SCREENSHOT_EVENT);
 }
 
-export function SaveImage(obj, successCallBack, errorCallback)
+export function saveImage(obj, successCallBack, errorCallback)
 {
   var defaults = {
       imageType: 'jpg',
