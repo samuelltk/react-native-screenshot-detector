@@ -5,8 +5,8 @@
 //
 
 #import "RNScreenshotDetector.h"
-#import <React/RCTBridge.h>
-#import <React/RCTEventDispatcher.h>
+#import "RCTBridge.h"
+#import "RCTEventDispatcher.h"
 
 @implementation RNScreenshotDetector
 
