@@ -19,7 +19,7 @@ NSMapTable *_successCallbacks;
 RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"ScreenshotTaken"];
+    return @[@"ScreenshotWillTaken",@"ScreenshotTaken"];
 }
 
 - (void)setupAndListen:(RCTBridge*)bridge {
@@ -31,6 +31,8 @@ RCT_EXPORT_MODULE();
                                                       object:nil
                                                        queue:mainQueue
                                                   usingBlock:^(NSNotification *notification) {
+                                                      [self.bridge.eventDispatcher sendAppEventWithName:@"ScreenshotWillTaken" body:notification];
+                                                      
                                                       double delayInSeconds = 1.0;
                                                       __block RCTEventEmitter* bself = self;
                                                       dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
