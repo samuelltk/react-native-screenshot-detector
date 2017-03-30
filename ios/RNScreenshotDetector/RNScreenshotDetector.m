@@ -27,17 +27,13 @@ RCT_EXPORT_MODULE();
     [self setBridge:bridge];
     // Now set up handler to detect if user takes a screenshot
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationUserDidTakeScreenshotNotification
                                                       object:nil
                                                        queue:mainQueue
                                                   usingBlock:^(NSNotification *notification) {
                                                       [self.bridge.eventDispatcher sendAppEventWithName:@"ScreenshotWillTaken" body:notification];
- -                                                      double delayInSeconds = 2.0;
- -                                                      __block RCTEventEmitter* bself = self;
- -                                                      dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
- -                                                      dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
- -                                                         [self screenshotDetected:notification];
- -                                                      });
+                                                      [self performSelector:@selector(screenshotDetected:) withObject:nil afterDelay:1.0];
                                                   }];
 }
 
