@@ -1,12 +1,6 @@
-//
-//  RNScreenshotDetector.m
-//
-//  Created by Graham Carling on 1/11/17.
-//
-
 #import "RNScreenshotDetector.h"
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+#import <React/RCTBridge.h>
+#import <React/RCTEventDispatcher.h>
 
 #import <Photos/Photos.h>
 #import <UIKit/UIKit.h>
@@ -14,12 +8,10 @@
 
 @implementation RNScreenshotDetector
 
-NSMapTable *_successCallbacks;
-
 RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"ScreenshotWillTaken",@"ScreenshotTaken"];
+    return @[@"ScreenshotTaken"];
 }
 
 - (void)setupAndListen:(RCTBridge*)bridge {
@@ -27,19 +19,16 @@ RCT_EXPORT_MODULE();
     [self setBridge:bridge];
     // Now set up handler to detect if user takes a screenshot
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationUserDidTakeScreenshotNotification
                                                       object:nil
                                                        queue:mainQueue
                                                   usingBlock:^(NSNotification *notification) {
-                                                      [self.bridge.eventDispatcher sendAppEventWithName:@"ScreenshotWillTaken" body:notification];
-                                                      [self performSelector:@selector(screenshotDetected:) withObject:nil afterDelay:1.0];
+                                                      [self screenshotDetected:notification];
                                                   }];
 }
 
 - (void)screenshotDetected:(NSNotification *)notification {
-    NSLog(@"%@",notification);
-    [self.bridge.eventDispatcher sendAppEventWithName:@"ScreenshotTaken" body:notification];
+    [self.bridge.eventDispatcher sendAppEventWithName:@"ScreenshotTaken" body:nil];
 }
 
 RCT_EXPORT_METHOD(saveImage:(NSDictionary *)obj successCallback:(RCTResponseSenderBlock)successCallback errorCallback:(RCTResponseErrorBlock)errorCallback)
