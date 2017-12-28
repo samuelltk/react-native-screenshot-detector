@@ -7,6 +7,9 @@
 #import "RCTLog.h"
 
 @implementation RNScreenshotDetector
+{
+    NSMapTable *_successCallbacks;
+}
 
 RCT_EXPORT_MODULE();
 
